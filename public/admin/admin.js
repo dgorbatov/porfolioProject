@@ -1,34 +1,13 @@
 "use strict";
 
 (function () {
-  const UI = new firebaseui.auth.AuthUI(firebase.auth());
   let adminAccess = false;
-
-  const uiConfig = {
-    callbacks: {
-      // signInSuccessWithAuthResult: confirmSignIn,
-      uiShown: () => {
-        document.getElementById('loader').style.display = 'none';
-      }
-    },
-    // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-    signInFlow: 'popup',
-    signInOptions: [
-      // Leave the lines as is for the providers you want to offer your users.
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-      firebase.auth.GithubAuthProvider.PROVIDER_ID
-    ],
-  };
 
   window.addEventListener("load", init);
 
   function init() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log("WE ARE IN");
         confirmSignIn(user);
       } else {
         window.location.href = "../login.html";
@@ -43,27 +22,13 @@
     id("request").addEventListener("click", requestAdmin);
   }
 
-  function enableAdminServices() {
-    if (!adminAccess) {
-      adminAccess = true;
-      enableTools();
-    }
-  }
-
-  function disableAdminServices() {
-    if (adminAccess) {
-      adminAccess = false;
-      disableTools();
-    }
-  }
-
   function goBack() {
     window.location.href = "/index.html";
   }
 
   function goToLogin() {
-    signOut();
-    goToSignIn();
+    firebase.auth().signOut();
+    window.location.href = "../login.html";
   }
 
   function toggleView() {
@@ -77,13 +42,6 @@
 
     enableRequestManager();
     enableClassManager();
-  }
-
-  function disableTools() {
-    id("exitTools").removeEventListener("click", exitTools);
-
-    disableRequestManager();
-    disableClassManager();
   }
 
   function exitTools() {
@@ -105,11 +63,6 @@
     toggleView();
   }
 
-  function disableRequestManager() {
-    id("bell").removeEventListener("click", launchRequestTool);
-    firebase.database().ref("request/").off();
-  }
-
   function enableClassManager() {
     id("class-launch").addEventListener("click", launchClassTool);
 
@@ -117,11 +70,6 @@
     firebase.database().ref("class").on("child_added", snapshot => {
       let data = snapshot.toJSON();
     });
-  }
-
-  function disableClassManager() {
-    id("class-launch").removeEventListener("click", launchClassTool);
-    firebase.database().ref("class").off();
   }
 
   function launchClassTool() {
@@ -172,31 +120,11 @@
     });
   }
 
-  function signOut() {
-    disableAdminServices();
-    firebase.auth().signOut();
-  }
-
   function error() {
     disableAdminServices();
     id("err").classList.remove("hidden");
     id("err").classList.add("flex");
     id("signin").classList.add("hidden");
-  }
-
-  function goToSignIn() {
-    if (!id("err").classList.contains("hidden")) {
-      id("err").classList.add("hidden");
-      id("err").classList.remove("flex");
-    }
-    if (id("signin").classList.contains("hidden")) {
-      id("signin").classList.remove("hidden")
-    }
-
-    if (!id("admin-sight").classList.contains("hidden")) {
-      id("admin-sight").classList.add("hidden")
-    }
-    UI.start('#firebaseui-auth-container', uiConfig);
   }
 
   function confirmSignIn(user) {
@@ -208,7 +136,7 @@
           if (!data.access) {
             error();
           } else {
-            enableAdminServices();
+            enableTools();
             goToAdmin();
           }
         });
@@ -225,9 +153,6 @@
     if (!id("err").classList.contains("hidden")) {
       id("err").classList.add("hidden");
       id("err").classList.remove("flex");
-    }
-    if (!id("signin").classList.contains("hidden")) {
-      id("signin").classList.add("hidden")
     }
 
     if (id("admin-sight").classList.contains("hidden")) {

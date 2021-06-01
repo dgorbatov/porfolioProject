@@ -26,7 +26,8 @@
     });
 
     id("log-in").addEventListener("click", () => {
-      window.location.href = "/login/login.html";
+      console.log("UPDATE");
+      window.location.href = "login.html";
     })
   }
 
