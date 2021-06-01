@@ -5,7 +5,7 @@
 
   const uiConfig = {
     callbacks: {
-      signInSuccessWithAuthResult: confirmSignIn,
+      // signInSuccessWithAuthResult: confirmSignIn,
       uiShown: () => {
         document.getElementById('loader').style.display = 'none';
       }
@@ -16,13 +16,22 @@
       // Leave the lines as is for the providers you want to offer your users.
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+      firebase.auth.GithubAuthProvider.PROVIDER_ID
     ],
   };
 
   window.addEventListener("load", init);
 
   function init() {
-    UI.start('#firebaseui-auth-container', uiConfig);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        confirmSignIn(user);
+      } else {
+        UI.start('#firebaseui-auth-container', uiConfig);
+      }
+    });
 
     id("back").addEventListener("click", () => {
       window.history.back();
@@ -38,23 +47,69 @@
 
     id("request").addEventListener("click", requestAdmin);
 
-    setUpRequestDatabase();
+    enableTools();
+  }
 
-    id("bell").addEventListener("click", () => {
-        id("admin-sight").classList.add("hidden")
-        id("notifications").classList.remove("hidden");
-        id("notifications").classList.add("flex");
+  function toggleView() {
+    id("admin-sight").classList.toggle("hidden")
+    id("tool-app").classList.toggle("hidden");
+    id("tool-app").classList.toggle("flex");
+  }
+
+  function enableTools() {
+    id("exitTools").addEventListener("click", () => {
+      hideAllTools();
+      toggleView();
+
+      if (!id("add").classList.contains("hidden")) {
+        id("add").classList.add('hidden');
+      }
     });
 
-    id("exitNotify").addEventListener("click", () => {
-      id("admin-sight").classList.remove("hidden")
-      id("notifications").classList.add("hidden");
-      id("notifications").classList.remove("flex");
+    enableRequestManager();
+    enableClassManager();
+  }
+
+  function enableRequestManager() {
+    id("bell").addEventListener("click", () => {
+      id("requests").classList.remove("hidden");
+      toggleView();
+    });
+    setUpRequestDatabase();
+  }
+
+  function enableClassManager() {
+    id("class-launch").addEventListener("click", () => {
+      id("class-tool").classList.remove("hidden");
+      toggleView();
+    });
+
+    setUpAddButton(addANewClass);
+    firebase.database().ref("class").on("child_added", snapshot => {
+      let data = snapshot.toJSON();
     });
   }
 
+  function addANewClass() {
+    console.log("HELLO");
+  }
+
+  function setUpAddButton(callback) {
+    id("add").classList.remove("hidden");
+    id("add").addEventListener("click", callback);
+  }
+
+  function hideAllTools() {
+    for (let child of id("tool-app").children) {
+      if (child.id !== "tool-buttons") {
+        if (!child.classList.contains("hidden")) {
+          child.classList.add("hidden");
+        }
+      }
+    }
+  }
+
   function setUpRequestDatabase() {
-    console.log("8");
     firebase.database().ref("request/").on("child_added", (snapshot) => {
       let uid = snapshot.key;
       snapshot = snapshot.toJSON();
@@ -101,25 +156,25 @@
     UI.start('#firebaseui-auth-container', uiConfig);
   }
 
-  function confirmSignIn(authResult) {
-    const user = authResult.user;
-
-    if (authResult.additionalUserInfo.isNewUser) {
-      firebase.database().ref('users/' + user.uid).set({
-        "access": false
-      });
-      error();
-    } else {
-      const userData = firebase.database().ref("users/" + user.uid);
-      userData.on("value", snapshot => {
-        let data = snapshot.toJSON();
-        if (!data.access) {
-          error();
-        } else {
-          goToAdmin();
-        }
-      });
-    }
+  function confirmSignIn(user) {
+    firebase.database().ref(`users/${user.uid}/access`).once("value", snapshot => {
+      if (snapshot.exists()){
+        const userData = firebase.database().ref("users/" + user.uid);
+        userData.on("value", snapshot => {
+          let data = snapshot.toJSON();
+          if (!data.access) {
+            error();
+          } else {
+            goToAdmin();
+          }
+        });
+      } else {
+        firebase.database().ref('users/' + user.uid).set({
+          "access": false
+        });
+        error();
+      }
+   });
   }
 
   function goToAdmin() {

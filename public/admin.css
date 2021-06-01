@@ -73,10 +73,10 @@ button {
 }
 
 button:hover {
-  opacity: 70%;
+  opacity: 60%;
 }
 
-#notifications {
+#tool-app {
   position: absolute;
   height: 90vh;
   width: 90vw;
@@ -87,18 +87,20 @@ button:hover {
   flex-direction: column;
 }
 
-#notifications > img {
-  width: 40px;
-  margin: 20px;
-  text-align: end;
+#tool-app > article {
   align-self: flex-end;
 }
 
-#requests {
+#tool-app > article > img {
+  width: 40px;
+  margin: 15px;
+}
+
+#tool-app > section {
   overflow-y: scroll;
 }
 
-#requests section {
+#tool-app > section section {
   background-color: rgb(146, 146, 148);
   display: flex;
   flex-direction: row;
@@ -109,13 +111,53 @@ button:hover {
   margin-left: 10px;
 }
 
-#requests section p {
+#tool-app > section section p {
   margin-left: 20px;
   margin-right: 20px;
 }
 
-#requests section img {
+#tool-app > section section img {
   justify-self: flex-end;
   margin: 10px;
   height: 40px;
+}
+
+#tools {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#tools > article {
+  background-color: gray;
+  width: 380px;
+  height: 300px;
+  text-align: center;
+  border-radius: 10%;
+  margin: 40px;
+}
+
+#tools > article h1 {
+  font-size: 28px;
+}
+
+#tools > article p {
+  margin: 15px;
+  font-style: italic;
+}
+
+#tools > article button {
+  background-color: #545454;
+  font-size: 15px;
+}
+
+#user-name {
+  text-align: center;
+}
+
+hr {
+  width: 60%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

@@ -49,23 +49,42 @@
           <img src="img/bellNotification.svg" class="hidden" id="bellNotify">
         </section>
         <h1 id="user-name"></h1>
+        <section id="tools">
+          <article>
+            <h1>Class Manager</h1>
+            <p>
+              This tool manages class that are displayed on the main of page of the website.
+              You can add, remove, and edit class information.
+            </p>
+            <hr>
+            <button id="class-launch">Launch This Tool</button>
+          </article>
+        </section>
       </article>
       <article id="err" class="hidden">
         <p>Error: You do not have access to the admin view</p>
         <button id="request">Request Access</button>
         <button id="back">Go Back</button>
       </article>
-      <article id="notifications" class="hidden">
-        <img src="img/circle-x-fill.svg" alt="cancel" id="exitNotify">
-        <section id="requests">
+      <article id="tool-app" class="hidden pop-window">
+        <article id="tool-buttons">
+          <img src="img/add-line.svg" alt="add" id="add" class="hidden">
+          <img src="img/circle-x-fill.svg" alt="leave" id="exitTools">
+        </article>
+
+        <section id="requests" class="hidden">
+        </section>
+
+        <section id="class-tool" class="hidden">
         </section>
       </article>
     </main>
 
     <footer>
       <p>
+        Created By: Daniel Gorbatov &emsp;
         Email: dzgorbatov@gmail.com &emsp;
-        Location: Seattle WA
+        Location: Sammamish WA
       </p>
     </footer>
   </body>
