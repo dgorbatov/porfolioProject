@@ -2,6 +2,7 @@
 
 (function () {
   const UI = new firebaseui.auth.AuthUI(firebase.auth());
+  let adminAccess = false;
 
   const uiConfig = {
     callbacks: {
@@ -27,27 +28,42 @@
   function init() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
+        console.log("WE ARE IN");
         confirmSignIn(user);
       } else {
-        UI.start('#firebaseui-auth-container', uiConfig);
+        window.location.href = "../login.html";
       }
     });
 
-    id("back").addEventListener("click", () => {
-      window.history.back();
-    });
-    id("home").addEventListener("click", () => {
-      window.history.back();
-    });
+    id("back").addEventListener("click", goBack);
+    id("home").addEventListener("click", goBack);
 
-    id("back-to-login").addEventListener("click", () => {
-      signOut();
-      goToSignIn();
-    });
+    id("back-to-login").addEventListener("click", goToLogin);
 
     id("request").addEventListener("click", requestAdmin);
+  }
 
-    enableTools();
+  function enableAdminServices() {
+    if (!adminAccess) {
+      adminAccess = true;
+      enableTools();
+    }
+  }
+
+  function disableAdminServices() {
+    if (adminAccess) {
+      adminAccess = false;
+      disableTools();
+    }
+  }
+
+  function goBack() {
+    window.location.href = "/index.html";
+  }
+
+  function goToLogin() {
+    signOut();
+    goToSignIn();
   }
 
   function toggleView() {
@@ -57,41 +73,66 @@
   }
 
   function enableTools() {
-    id("exitTools").addEventListener("click", () => {
-      hideAllTools();
-      toggleView();
-
-      if (!id("add").classList.contains("hidden")) {
-        id("add").classList.add('hidden');
-      }
-    });
+    id("exitTools").addEventListener("click", exitTools);
 
     enableRequestManager();
     enableClassManager();
   }
 
+  function disableTools() {
+    id("exitTools").removeEventListener("click", exitTools);
+
+    disableRequestManager();
+    disableClassManager();
+  }
+
+  function exitTools() {
+    hideAllTools();
+    toggleView();
+
+    if (!id("add").classList.contains("hidden")) {
+      id("add").classList.add('hidden');
+    }
+  }
+
   function enableRequestManager() {
-    id("bell").addEventListener("click", () => {
-      id("requests").classList.remove("hidden");
-      toggleView();
-    });
+    id("bell").addEventListener("click", launchRequestTool);
     setUpRequestDatabase();
   }
 
-  function enableClassManager() {
-    id("class-launch").addEventListener("click", () => {
-      id("class-tool").classList.remove("hidden");
-      toggleView();
-    });
+  function launchRequestTool() {
+    id("requests").classList.remove("hidden");
+    toggleView();
+  }
 
-    setUpAddButton(addANewClass);
+  function disableRequestManager() {
+    id("bell").removeEventListener("click", launchRequestTool);
+    firebase.database().ref("request/").off();
+  }
+
+  function enableClassManager() {
+    id("class-launch").addEventListener("click", launchClassTool);
+
+
     firebase.database().ref("class").on("child_added", snapshot => {
       let data = snapshot.toJSON();
     });
   }
 
+  function disableClassManager() {
+    id("class-launch").removeEventListener("click", launchClassTool);
+    firebase.database().ref("class").off();
+  }
+
+  function launchClassTool() {
+    id("class-tool").classList.remove("hidden");
+    toggleView();
+    setUpAddButton(addANewClass);
+  }
+
   function addANewClass() {
-    console.log("HELLO");
+    id("new-class-form").classList.remove("hidden");
+    id("class-view").classList.add("hidden");
   }
 
   function setUpAddButton(callback) {
@@ -132,10 +173,12 @@
   }
 
   function signOut() {
+    disableAdminServices();
     firebase.auth().signOut();
   }
 
   function error() {
+    disableAdminServices();
     id("err").classList.remove("hidden");
     id("err").classList.add("flex");
     id("signin").classList.add("hidden");
@@ -165,6 +208,7 @@
           if (!data.access) {
             error();
           } else {
+            enableAdminServices();
             goToAdmin();
           }
         });
@@ -227,6 +271,36 @@
 
     request.setAttribute("id", uid);
     return request;
+  }
+
+  function genClass(classInfo, id) {
+    let newClass = gen("section");
+
+    newClass.appendChild(generateText("Name: " + classInfo.name));
+    newClass.appendChild(generateText("University: " + classInfo.university));
+    newClass.appendChild(generateText("Done: " + classInfo.done));
+    newClass.appendChild(generateText("Instructor: " + classInfo.instructor));
+
+    let website = gen("a");
+    website.href = classInfo.website;
+    website.textContent = "Course Website";
+
+    newClass.appendChild(website);
+
+    let checkMark = gen("img");
+    checkMark.src = "img/white-heavy-check-mark.svg";
+    checkMark.alt = "check mark";
+    checkMark.addEventListener("click", confirmRequest);
+    newClass.appendChild(checkMark);
+
+    let cancel = gen("img");
+    cancel.src = "img/cancel.svg";
+    cancel.alt = "cancel";
+    cancel.addEventListener("click", rejectRequest);
+    newClass.appendChild(cancel);
+
+    newClass.setAttribute("id", id);
+    return newClass;
   }
 
   function confirmRequest() {

@@ -26,7 +26,7 @@
     });
 
     id("log-in").addEventListener("click", () => {
-      window.location.href = "admin.html";
+      window.location.href = "/login/login.html";
     })
   }
 

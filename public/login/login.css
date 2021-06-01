@@ -1,0 +1,42 @@
+header, footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  background-color: rgb(83, 74, 74);
+  position: fixed;
+  left: 0;
+}
+
+header {
+  top: 0;
+}
+
+header section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+header div {
+  justify-self: flex-end;
+  position: fixed;
+  right: 20px;
+}
+header img {
+  width: 80px;
+}
+
+header p {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+footer {
+  bottom: 0;
+}
+
+main {
+  margin-top: 124px;
+}

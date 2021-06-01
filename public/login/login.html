@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Daniel Portfolio Admin</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="login.css">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/8.6.3/firebase-app.js"></script>
+
+    <!-- Place these after importing firebase app-->
+    <script src="/__/firebase/8.6.1/firebase-auth.js"></script>
+    <script src="/__/firebase/8.6.1/firebase-database.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/8.6.3/firebase-analytics.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css" />
+
+    <script src="login.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <section>
+        <h1>Admin View</h1>
+        <p>If you don't know what this means go back to the main sight</p>
+      </section>
+      <div>
+        <img src="../img/home-filled.svg" alt="home" id="home">
+      </div>
+    </header>
+
+    <main>
+      <article id="signin">
+        <div id="firebaseui-auth-container"></div>
+        <div id="loader">Loading...</div>
+      </article>
+    </main>
+
+    <footer>
+      <p>
+        Created By: Daniel Gorbatov &emsp;
+        Email: dzgorbatov@gmail.com &emsp;
+        Location: Sammamish WA
+      </p>
+    </footer>
+  </body>
+</html>

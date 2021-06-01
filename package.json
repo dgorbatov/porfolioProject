@@ -1,0 +1,23 @@
+{
+  "name": "porfolioproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "firebase": "^8.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgorbatov/porfolioProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dgorbatov/porfolioProject/issues"
+  },
+  "homepage": "https://github.com/dgorbatov/porfolioProject#readme"
+}
