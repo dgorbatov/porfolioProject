@@ -28,7 +28,7 @@
     id("log-in").addEventListener("click", () => {
       console.log("UPDATE");
       window.location.href = "login/login.html";
-    })
+    });
   }
 
   function genClass(data) {

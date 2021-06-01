@@ -28,7 +28,7 @@
 
   function goToLogin() {
     firebase.auth().signOut();
-    window.location.href = "../login.html";
+    window.location.href = "../login/login.html";
   }
 
   function toggleView() {
@@ -121,7 +121,6 @@
   }
 
   function error() {
-    disableAdminServices();
     id("err").classList.remove("hidden");
     id("err").classList.add("flex");
     id("signin").classList.add("hidden");
