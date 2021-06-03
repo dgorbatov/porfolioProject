@@ -10,7 +10,7 @@
       if (user) {
         confirmSignIn(user);
       } else {
-        window.location.href = "../login.html";
+        window.location.href = "../login/login.html";
       }
     });
 
@@ -42,6 +42,51 @@
 
     enableRequestManager();
     enableClassManager();
+    enableSchoolManager();
+    enableAboutMeManager();
+  }
+
+  function enableSchoolManager() {
+    id("school-launch").addEventListener("click", launchSchoolTool);
+    id("exit-school-form").addEventListener("click", addNewSchoolToggle);
+
+    qs("#new-school-form form").addEventListener("submit", form => {
+      form.preventDefault();
+      firebase.database().ref('school/' + id("school-name").value).set({
+        "color": id("color").value,
+      });
+      addNewSchoolToggle();
+    });
+
+    firebase.database().ref("school").on("child_added", snapshot => {
+      let data = snapshot.toJSON();
+      id("school-view").appendChild(genSchool(data.color, snapshot.key));
+
+      let newSchoolOption = gen("option");
+      newSchoolOption.value = snapshot.key;
+      newSchoolOption.textContent = snapshot.key;
+      newSchoolOption.id = snapshot.key + "-option";
+
+      id("uni").appendChild(newSchoolOption);
+    });
+
+    firebase.database().ref("school").on("child_removed", snapshot => {
+      id(snapshot.key).remove();
+      id(snapshot.key + "-option").remove();
+    });
+  }
+
+  function launchSchoolTool() {
+    id("school-tool").classList.remove("hidden");
+    toggleView();
+    setUpAddButton(addNewSchoolToggle);
+  }
+
+  function addNewSchoolToggle() {
+    id("new-school-form").classList.toggle("hidden");
+    id("new-school-form").classList.toggle("flex");
+    id("school-view").classList.toggle("hidden");
+    qs("#new-school-form form").reset();
   }
 
   function exitTools() {
@@ -65,22 +110,68 @@
 
   function enableClassManager() {
     id("class-launch").addEventListener("click", launchClassTool);
+    id("exitClassForm").addEventListener("click", addANewClassToggle);
 
+    qs("#new-class-form form").addEventListener("submit", form => {
+      form.preventDefault();
+      firebase.database().ref('class/' + id("course-num").value).set({
+        "done": id("done").value === "true",
+        "name": id("name").value,
+        "university": id("uni").value,
+        "instructor": id("instructor").value,
+        "website": id("website").value
+      });
+
+      addANewClassToggle();
+    });
 
     firebase.database().ref("class").on("child_added", snapshot => {
       let data = snapshot.toJSON();
+      id("class-view").appendChild(genClass(data, snapshot.key));
     });
+
+    firebase.database().ref("class").on("child_removed", snapshot => {
+      id(snapshot.key).remove();
+    });
+  }
+
+  function enableAboutMeManager() {
+    id("about-me-launch").addEventListener("click", launchAboutMeTool);
+
+    id("reset-about-me").addEventListener("click", () => {
+      firebase.database().ref("about-me/text").on("value", snapshot => {
+        id("about-me-tool").children[0].value = snapshot.toJSON();
+      });
+    });
+
+    id("save-about-me").addEventListener("click", () => {
+      var updates = {};
+      updates["about-me/hidden"] = id("hide-true").checked;
+      updates["about-me/text"] = id("about-me-tool").children[0].value;
+      return firebase.database().ref().update(updates);
+    })
   }
 
   function launchClassTool() {
     id("class-tool").classList.remove("hidden");
     toggleView();
-    setUpAddButton(addANewClass);
+    setUpAddButton(addANewClassToggle);
   }
 
-  function addANewClass() {
-    id("new-class-form").classList.remove("hidden");
-    id("class-view").classList.add("hidden");
+  function launchAboutMeTool() {
+    id("about-me-tool").classList.remove("hidden");
+    toggleView();
+
+    firebase.database().ref("about-me/text").on("value", snapshot => {
+      id("about-me-tool").children[0].value = snapshot.toJSON();
+    });
+  }
+
+  function addANewClassToggle() {
+    id("new-class-form").classList.toggle("hidden");
+    id("new-class-form").classList.toggle("flex");
+    id("class-view").classList.toggle("hidden");
+    qs("#new-class-form form").reset();
   }
 
   function setUpAddButton(callback) {
@@ -123,7 +214,6 @@
   function error() {
     id("err").classList.remove("hidden");
     id("err").classList.add("flex");
-    id("signin").classList.add("hidden");
   }
 
   function confirmSignIn(user) {
@@ -182,13 +272,13 @@
     request.appendChild(generateText("Verified: " + userInfo.verified));
 
     let checkMark = gen("img");
-    checkMark.src = "img/white-heavy-check-mark.svg";
+    checkMark.src = "../img/white-heavy-check-mark.svg";
     checkMark.alt = "check mark";
     checkMark.addEventListener("click", confirmRequest);
     request.appendChild(checkMark);
 
     let cancel = gen("img");
-    cancel.src = "img/cancel.svg";
+    cancel.src = "../img/cancel.svg";
     cancel.alt = "cancel";
     cancel.addEventListener("click", rejectRequest);
     request.appendChild(cancel);
@@ -201,6 +291,7 @@
     let newClass = gen("section");
 
     newClass.appendChild(generateText("Name: " + classInfo.name));
+    newClass.appendChild(generateText("Course Num: " + id));
     newClass.appendChild(generateText("University: " + classInfo.university));
     newClass.appendChild(generateText("Done: " + classInfo.done));
     newClass.appendChild(generateText("Instructor: " + classInfo.instructor));
@@ -211,20 +302,57 @@
 
     newClass.appendChild(website);
 
-    let checkMark = gen("img");
-    checkMark.src = "img/white-heavy-check-mark.svg";
-    checkMark.alt = "check mark";
-    checkMark.addEventListener("click", confirmRequest);
-    newClass.appendChild(checkMark);
-
     let cancel = gen("img");
-    cancel.src = "img/cancel.svg";
+    cancel.src = "../img/cancel.svg";
     cancel.alt = "cancel";
-    cancel.addEventListener("click", rejectRequest);
+    cancel.addEventListener("click", removeClass);
     newClass.appendChild(cancel);
 
     newClass.setAttribute("id", id);
     return newClass;
+  }
+
+  /**
+   * Creates a new container for a school.
+   *
+   * <section>
+   *  <p>Name: PSU</p>
+   *  <p>School Color: #657</p>
+   *  <div class="hexColor"></div>
+   *  <img src="../img/cancel.svg" alt="cancel">
+   * </section>
+   * @param {String} color - the school color
+   * @param {String} name - the school name
+   * @returns {Object} - the container object
+   */
+  function genSchool(color, name) {
+    let newSchool = gen("section");
+
+    newSchool.appendChild(generateText("Name: " + name));
+    newSchool.appendChild(generateText("School Color Hex: " + color));
+
+    let colorPreview = gen("div");
+    colorPreview.classList.add("hexColor");
+    colorPreview.style.backgroundColor = color;
+
+    newSchool.appendChild(colorPreview);
+
+    let cancel = gen("img");
+    cancel.src = "../img/cancel.svg";
+    cancel.alt = "cancel";
+    cancel.addEventListener("click", removeSchool);
+    newSchool.appendChild(cancel);
+
+    newSchool.setAttribute("id", name);
+    return newSchool;
+  }
+
+  function removeClass() {
+    firebase.database().ref('class/' + this.parentNode.id).remove();
+  }
+
+  function removeSchool() {
+    firebase.database().ref('school/' + this.parentNode.id).remove();
   }
 
   function confirmRequest() {
@@ -232,8 +360,6 @@
 
     var updates = {};
     updates["users/" + this.parentNode.id + "/access"] = true;
-
-    console.log(updates);
     return firebase.database().ref().update(updates);
   }
 
@@ -273,4 +399,14 @@
   function gen(tagName) {
     return document.createElement(tagName);
   }
+
+  /**
+   * Returns the first element that matches the given CSS selector.
+   * @param {string} selector - CSS query selector.
+   * @returns {object} The first DOM object matching the query.
+   */
+  function qs(selector) {
+    return document.querySelector(selector);
+  }
+
 })();

@@ -161,3 +161,53 @@ hr {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+input[type=text], select {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#new-class-form, #new-school-form {
+  flex-direction: column;
+}
+
+#new-class-form button, #new-school-form button {
+  width: 20%;
+  align-self: center;
+  margin: 20px;
+}
+
+a {
+  color: purple;
+}
+
+.hexColor {
+  background-color: purple;
+  width: 40px;
+  height: 40px;
+}
+
+#about-me-tool > article{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#about-me-tool > article > * {
+  margin: 15px;
+}
+
+textarea {
+  width: 30vw;
+  height: 40vh;
+}

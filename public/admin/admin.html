@@ -50,10 +50,40 @@
             <h1>Class Manager</h1>
             <p>
               This tool manages class that are displayed on the main of page of the website.
-              You can add, remove, and edit class information.
+              You can add, and remove class information.
             </p>
             <hr>
             <button id="class-launch">Launch This Tool</button>
+          </article>
+
+          <article>
+            <h1>School Manager</h1>
+            <p>
+              This tool manages the schools that are available to link to any given class.
+              Each school has a name and color.
+            </p>
+            <hr>
+            <button id="school-launch">Launch This Tool</button>
+          </article>
+
+          <article>
+            <h1>About Me Manager</h1>
+            <p>
+              This tool manages the about me text section. It makes editing that section
+              super easy. You can chose to hide the section as well.
+            </p>
+            <hr>
+            <button id="about-me-launch">Launch This Tool</button>
+          </article>
+
+          <article>
+            <h1>Programing Languages Manager</h1>
+            <p>
+              This tool manages the programing languages that are displayed on the main sight.
+              You can add and remove programing languages. *** WORK IN PROGRESS NOT DONE YET ****
+            </p>
+            <hr>
+            <button id="about-me-launch">Launch This Tool</button>
           </article>
         </section>
       </article>
@@ -73,20 +103,73 @@
 
         <section id="class-tool" class="hidden">
           <article id="class-view">
-            <section id="ZZcJrBj5CIKrNhMs0vxh5iGJT1UU">
-              <p>Name: CS162</p>
-              <p>University: PSU</p>
-              <p>Done: true</p>
-              <p>Instructor: Karla Fant</p>
-              <a href="http://web.cecs.pdx.edu/~karlaf/cs162_002.htm#CS162%20Spring%202011"> Course Website</a>
-              <img src="../img/white-heavy-check-mark.svg" alt="check mark">
-              <img src="../img/cancel.svg" alt="cancel">
-            </section>
           </article>
-          <form id="new-class-form" class="hidden">
 
-          </form>
+          <article id="new-class-form" class="hidden">
+            <form>
+              <label for="name">Name Of The Class</label>
+              <input type="text" id="name" placeholder="Name Of The Class" required>
+
+              <label for="course-num">Course Num (e.g CSE154, MATH120)</label>
+              <input type="text" id="course-num" placeholder="Course Number" required>
+
+              <label for="uni">School Name</label>
+              <select id="uni">
+              </select>
+
+              <label for="done">Done</label>
+              <select id="done">
+                <option value="true">True</option>
+                <option value="false">False</option>
+              </select>
+
+              <label for="instructor">Instructor Name</label>
+              <input type="text" id="instructor" placeholder="Name Of The Instructor" required>
+
+              <label for="website">Course Website</label>
+              <input type="text" id="website" placeholder="Website Name" required>
+
+              <button id="classFormSubmit">Submit Form</button>
+            </form>
+            <button id="exitClassForm">Exit Form</button>
+          </article>
         </section>
+
+        <section id="school-tool" class="hidden">
+          <article id="school-view">
+          </article>
+
+          <article id="new-school-form" class="hidden">
+            <form>
+              <label for="school-name">Name Of The School</label>
+              <input type="text" id="school-name" placeholder="Name Of The School" required>
+
+              <label for="color">School Color Hex</label>
+              <input type="text" id="color" placeholder="Hex of School Color" required
+                pattern="#[A-Za-z1-9]{6}" title="Must be a Valid Hex Color">
+
+              <button id="schoolFormSubmit">Submit Form</button>
+            </form>
+            <button id="exit-school-form">Exit Form</button>
+          </article>
+        </section>
+
+        <section id="about-me-tool" class="hidden">
+          <article>
+            <textarea name="paragraph_text" cols="50" rows="10"></textarea>
+
+            <article>
+              <input type="radio" id="hide-true" name="hidden" value="true">
+              <label for="hide-true">Hidden</label>
+
+              <input type="radio" id="hide-false" name="hidden" value="false" checked>
+              <label for="hide-false">Shown</label>
+            </article>
+            <button id="reset-about-me">Reset</button>
+            <button id="save-about-me">Save</button>
+
+          </section>
+        </article>
       </article>
     </main>
 
