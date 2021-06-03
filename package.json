@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/dgorbatov/porfolioProject/issues"
   },
-  "homepage": "https://github.com/dgorbatov/porfolioProject#readme"
+  "homepage": "https://github.com/dgorbatov/porfolioProject#readme",
+  "type": "module"
 }
