@@ -16,13 +16,10 @@
     });
 
     DB.on("child_added", (snapshot) => {
+      console.log('HELLO');
       let data = snapshot.toJSON();
 
-     if (!data.done) {
-        id("class").appendChild(genClass(data));
-      } else {
-        id("prev-class").appendChild(genClass(data));
-      }
+      id("class").appendChild(genClass(data, snapshot.key));
     });
 
     id("log-in").addEventListener("click", () => {
@@ -31,28 +28,33 @@
     });
   }
 
-  function genClass(data) {
-    /*
-      Example html class:
-      <section class="uw">
-        <p>CSE 154</p>
-      </section>
-     */
+  /**
+   * Creates a new class container
+   * @param {Object} data - the data of the new class
+   * @returns {Object} - the new class container
+   */
+  function genClass(data, courseNum) {
     let section = gen("section");
-    let courseName = gen("p");
 
-    courseName.textContent = data.name;
-
+    let courseName = gen("h3");
+    console.log(courseNum);
+    courseName.textContent = courseNum;
     section.appendChild(courseName);
 
-    if (data.done) {
-      // TODO: Expand institution availability
-      if (data.university === "PSU") {
-        section.classList.add("psu");
-      } else if (data.university === "UW") {
-        section.classList.add("uw");
-      }
-    }
+    let courseInfo = gen("section");
+    courseInfo.classList.add("info");
+
+    courseInfo.appendChild(generateText("Name: " + data.name));
+    courseInfo.appendChild(generateText("School: " + data.university));
+    courseInfo.appendChild(generateText("Done: " + data.done));
+    courseInfo.appendChild(generateText("Instructor: " + data.instructor));
+    courseInfo.appendChild(generateText("Website: " + data.website));
+
+    section.appendChild(courseInfo);
+
+    firebase.database().ref("/school/" + data.university).on("value", snapshot => {
+      section.style.backgroundColor = snapshot.toJSON().color;
+    })
 
     return section;
   }
@@ -73,5 +75,16 @@
    */
   function gen(tagName) {
     return document.createElement(tagName);
+  }
+
+  /**
+   * Generates a new p tag.
+   * @param {String} textValue - the text that will occupy the p tag
+   * @returns {Object} - the new p tag
+   */
+  function generateText(textValue) {
+    let text = gen("p");
+    text.textContent = textValue;
+    return text;
   }
 })();

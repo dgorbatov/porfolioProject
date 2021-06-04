@@ -1,8 +1,21 @@
 body {
-  background-color: #333;
   color: white;
   display: flex;
   flex-direction: column;
+  background-color: #333;
+  font-family: 'Open Sans', sans-serif;
+  overflow-x: hidden;
+  animation: fadeInAnimation ease 2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+   }
 }
 
 .hidden {
