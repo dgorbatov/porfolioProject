@@ -176,11 +176,11 @@ form {
   flex-direction: column;
 }
 
-#new-class-form, #new-school-form {
+#new-class-form, #new-school-form, #new-lang-form {
   flex-direction: column;
 }
 
-#new-class-form button, #new-school-form button {
+#new-class-form button, #new-school-form button, #new-lang-form button {
   width: 20%;
   align-self: center;
   margin: 20px;

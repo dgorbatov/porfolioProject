@@ -1,3 +1,14 @@
+<!--
+  Name: Daniel Gorbatov
+  Date: 6/4/21
+
+  All svg drawing taken from iconify.design
+  Heavy inspiration taken from Austin Jenchi
+  https://courses.cs.washington.edu/courses/cse154/21sp/staff/about-me/austin-jenchi/index.html
+  Button rainbow glow taken from https://dev.to/webdeasy/top-20-css-buttons-animations-f41
+-->
+
+
 <!DOCTYPE html>
 <html lan="en">
   <head>
@@ -33,7 +44,7 @@
 
       <hr>
 
-      <p>
+      <p class="hidden" id="about-me">
         &emsp; Hello WORLD!, I am Daniel Gorbatov. I am a student at EHS and take class's at UW
         as an NM student. Most of the classes I take relate to ether CS or Math
         (class list bellow). I started taking college class's for CS when I was 10
@@ -54,12 +65,40 @@
 
     <article>
       <h1>My Projects!</h1>
-      <article id="projects">
-        <img src="img/memeWebsite.jpg">
-        <img src="img/memeWebsite.jpg">
-        <img src="img/memeWebsite.jpg">
-        <img src="img/memeWebsite.jpg">
-      </article>
+      <section id="slideshow">
+        <button id="slide-left">
+          <img src="img/arrow-next-24-regular.svg" alt="next arrow">
+        </button>
+        <article id="projects">
+          <section id="meme">
+            <img src="img/memeWebsite.jpg">
+            <section>
+              <p>Meme Generator</p>
+              <button  class="glow-on-hover">Launch</button>
+            </section>
+          </section>
+
+          <section id="meme">
+            <img src="img/memeWebsite.jpg">
+            <section>
+              <p>Meme Generator</p>
+              <button  class="glow-on-hover">Launch</button>
+            </section>
+          </section>
+
+          <section id="meme">
+            <img src="img/memeWebsite.jpg">
+            <section>
+              <p>Meme Generator</p>
+              <button  class="glow-on-hover">Launch</button>
+            </section>
+          </section>
+        </article>
+
+        <button id="slide-right">
+          <img src="img/arrow-next-24-regular.svg" alt="next arrow">
+        </button>
+      </section>
 
       <h1>Classes I have already taken or am Currently Taking</h1>
       <article id="class">
@@ -109,54 +148,16 @@
       </article>
     </article>
 
-    <p>Porgraming languges I have used before</p>
     <section id="prog-lang">
-      <img src="https://img.icons8.com/color/48/000000/c-plus-plus-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/java-coffee-cup-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/js.png"/>
-      <img src="https://img.icons8.com/nolan/64/html-5.png"/>
-      <img src="https://img.icons8.com/dotty/80/000000/css-filetype.png"/>
+      <h2>Programing languages I have used before</h2>
+      <section>
+        <!--Programing Language Icons taken from websites in the img src-->
+      </section>
     </section>
-    <p>Porgraming languges I have used before</p>
-    <section id="prog-lang">
-      <img src="https://img.icons8.com/color/48/000000/c-plus-plus-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/java-coffee-cup-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/js.png"/>
-      <img src="https://img.icons8.com/nolan/64/html-5.png"/>
-      <img src="https://img.icons8.com/dotty/80/000000/css-filetype.png"/>
-    </section>
-    <p>Porgraming languges I have used before</p>
-    <section id="prog-lang">
-      <img src="https://img.icons8.com/color/48/000000/c-plus-plus-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/java-coffee-cup-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/js.png"/>
-      <img src="https://img.icons8.com/nolan/64/html-5.png"/>
-      <img src="https://img.icons8.com/dotty/80/000000/css-filetype.png"/>
-    </section>
-    <p>Porgraming languges I have used before</p>
-    <section id="prog-lang">
-      <img src="https://img.icons8.com/color/48/000000/c-plus-plus-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/java-coffee-cup-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/js.png"/>
-      <img src="https://img.icons8.com/nolan/64/html-5.png"/>
-      <img src="https://img.icons8.com/dotty/80/000000/css-filetype.png"/>
-    </section>
-    <p>Porgraming languges I have used before</p>
-    <section id="prog-lang">
-      <img src="https://img.icons8.com/color/48/000000/c-plus-plus-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/java-coffee-cup-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/js.png"/>
-      <img src="https://img.icons8.com/nolan/64/html-5.png"/>
-      <img src="https://img.icons8.com/dotty/80/000000/css-filetype.png"/>
-    </section>
-    <p>Porgraming languges I have used before</p>
-    <section id="prog-lang">
-      <img src="https://img.icons8.com/color/48/000000/c-plus-plus-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/java-coffee-cup-logo.png"/>
-      <img src="https://img.icons8.com/nolan/64/js.png"/>
-      <img src="https://img.icons8.com/nolan/64/html-5.png"/>
-      <img src="https://img.icons8.com/dotty/80/000000/css-filetype.png"/>
-    </section>
+
+    <footer>
+      <p>Portions of this page © 2021 Daniel Gorbatov, other attributions cited in page source</p>
+    </footer>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="/__/firebase/8.6.3/firebase-app.js"></script>

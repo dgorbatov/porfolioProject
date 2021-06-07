@@ -16,7 +16,6 @@
     });
 
     DB.on("child_added", (snapshot) => {
-      console.log('HELLO');
       let data = snapshot.toJSON();
 
       id("class").appendChild(genClass(data, snapshot.key));
@@ -25,6 +24,55 @@
     id("log-in").addEventListener("click", () => {
       console.log("UPDATE");
       window.location.href = "login/login.html";
+    });
+
+    setUpAboutMeUpdate();
+    updateAboutMe();
+    setupLang();
+  }
+
+  function setupLang() {
+    firebase.database().ref("lang/").on("child_added", snapshot => {
+      let data = snapshot.toJSON();
+
+      let img = gen("img");
+      img.src = data.url;
+      img.alt = snapshot.key;
+
+      qs("#prog-lang section").appendChild(img);
+    });
+  }
+
+  function setUpAboutMeUpdate () {
+    firebase.database().ref("about-me/").on("child_changed", snapshot => {
+      let data = snapshot.toJSON();
+
+      if (typeof(data) === "string") {
+        id("about-me").textContent = data;
+      } else {
+        if (data && !id("about-me").classList.contains("hidden")) {
+          id("about-me").classList.add("hidden")
+        } else if (!data && id("about-me").classList.contains("hidden")) {
+          id("about-me").classList.remove("hidden");
+        }
+      }
+    });
+  }
+
+  function updateAboutMe() {
+    firebase.database().ref("about-me/").on("value", snapshot => {
+      let data = snapshot.toJSON();
+
+      if (data) {
+
+        id("about-me").textContent = data.text;
+
+        if (data.hidden && !id("about-me").classList.contains("hidden")) {
+          id("about-me").classList.add("hidden")
+        } else if (!data.hidden && id("about-me").classList.contains("hidden")) {
+          id("about-me").classList.remove("hidden");
+        }
+      }
     });
   }
 
@@ -37,7 +85,6 @@
     let section = gen("section");
 
     let courseName = gen("h3");
-    console.log(courseNum);
     courseName.textContent = courseNum;
     section.appendChild(courseName);
 
@@ -75,6 +122,15 @@
    */
   function gen(tagName) {
     return document.createElement(tagName);
+  }
+
+  /**
+   * Returns the first element that matches the given CSS selector.
+   * @param {string} selector - CSS query selector.
+   * @returns {object} The first DOM object matching the query.
+   */
+  function qs(selector) {
+    return document.querySelector(selector);
   }
 
   /**

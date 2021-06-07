@@ -27,6 +27,7 @@
     enableClassManager();
     enableSchoolManager();
     enableAboutMeManager();
+    enableLangManager();
   }
 
   /*********************************************************************/
@@ -81,14 +82,14 @@
 
     id("reset-about-me").addEventListener("click", () => {
       firebase.database().ref("about-me/text").on("value", snapshot => {
-        id("about-me-tool").children[0].value = snapshot.toJSON();
+        id("about-me-tool").children[0].children[0].value = snapshot.toJSON();
       });
     });
 
     id("save-about-me").addEventListener("click", () => {
       var updates = {};
       updates["about-me/hidden"] = id("hide-true").checked;
-      updates["about-me/text"] = id("about-me-tool").children[0].value;
+      updates["about-me/text"] = id("about-me-tool").children[0].children[0].value;
       return firebase.database().ref().update(updates);
     })
   }
@@ -355,6 +356,78 @@
     firebase.database().ref("request/").on("child_removed", snapshot => {
       id(snapshot.key).remove();
     });
+  }
+
+  /*********************************************************************/
+  /************************* Prog Lang Manager *************************/
+  /*********************************************************************/
+
+  function enableLangManager() {
+    id("prog-lang-launch").addEventListener("click", launchLangTool);
+    id("exit-lang-form").addEventListener("click", addANewLangToggle);
+
+    qs("#new-lang-form form").addEventListener("submit", form => {
+      form.preventDefault();
+
+      if (id(id("lang-name").value)) {
+        //TODO:
+        console.error("ACTIVATE ERROR");
+      } else {
+        firebase.database().ref("lang/" + id("lang-name").value).set({
+          "url": id("lang-url").value
+        });
+
+        addANewLangToggle();
+      }
+    });
+
+    firebase.database().ref("lang/").on("child_added", snapshot => {
+      let data = snapshot.toJSON();
+      id("prog-lang-view").appendChild(genLang(data, snapshot.key));
+    });
+
+    firebase.database().ref("lang/").on("child_removed", snapshot => {
+      id(snapshot.key).remove();
+    });
+  }
+
+  function launchLangTool() {
+    id("prog-lang-tool").classList.remove("hidden");
+    toggleView();
+    setUpAddButton(addANewLangToggle);
+  }
+
+  function genLang(langInfo, id) {
+    let newLang = gen("section");
+
+    newLang.appendChild(generateText("Name: " + id));
+    newLang.appendChild(generateText("URL: " + langInfo.url));
+
+    let website = gen("img");
+    website.src = langInfo.url;
+    website.alt = id;
+
+    newLang.appendChild(website);
+
+    let cancel = gen("img");
+    cancel.src = "../img/cancel.svg";
+    cancel.alt = "cancel";
+    cancel.addEventListener("click", removeLang);
+    newLang.appendChild(cancel);
+
+    newLang.setAttribute("id", id);
+    return newLang;
+  }
+
+  function removeLang() {
+    firebase.database().ref('lang/' + this.parentNode.id).remove();
+  }
+
+  function addANewLangToggle() {
+    id("new-lang-form").classList.toggle("hidden");
+    id("new-lang-form").classList.toggle("flex");
+    id("prog-lang-view").classList.toggle("hidden");
+    qs("#new-lang-form form").reset();
   }
 
   /*********************************************************************/

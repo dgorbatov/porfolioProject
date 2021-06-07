@@ -79,10 +79,10 @@
             <h1>Programing Languages Manager</h1>
             <p>
               This tool manages the programing languages that are displayed on the main sight.
-              You can add and remove programing languages. *** WORK IN PROGRESS NOT DONE YET ****
+              You can add and remove programing languages.
             </p>
             <hr>
-            <button id="about-me-launch">Launch This Tool</button>
+            <button id="prog-lang-launch">Launch This Tool</button>
           </article>
         </section>
       </article>
@@ -171,9 +171,26 @@
             </article>
             <button id="reset-about-me">Reset</button>
             <button id="save-about-me">Save</button>
+          </article>
+        </section>
 
-          </section>
-        </article>
+        <section id="prog-lang-tool" class="hidden">
+          <article id="prog-lang-view">
+          </article>
+
+          <article id="new-lang-form" class="hidden">
+            <form>
+              <label for="lang-name">Name Of The Programing Language</label>
+              <input type="text" id="lang-name" placeholder="Name Of The Language" required>
+
+              <label for="lang-url">Programing Image URL</label>
+              <input type="text" id="lang-url" placeholder="Programing Image URL" required>
+
+              <button>Submit Form</button>
+            </form>
+            <button id="exit-lang-form">Exit Form</button>
+          </article>
+        </section>
       </article>
     </main>
 
